@@ -17,7 +17,7 @@
 
 ```bash
 git clone https://github.com/Evgunt/testpy.git
-cd testapp
+cd testpy
 ```
 
 ### 2. Создайте и активируйте виртуальное окружение
