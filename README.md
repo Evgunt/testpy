@@ -45,7 +45,7 @@ pip install -r requirements.txt
 
 ```bash
 pip install django
-pip install bootstrap4
+pip install django-bootstrap4
 ```
 
 ### 4. Примените миграции базы данных
