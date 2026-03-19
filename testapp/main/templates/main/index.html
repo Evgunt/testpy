@@ -1,0 +1,118 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+<h3 class="directory-title">Записи ДДС</h3>
+
+<a class="btn btn-primary" href="{% url 'main:createRecord'  %}">Добавить запись</a>
+<div class="btn btn-primary" id="filter-button">Фильтр</div>
+<form method="get" class="mb-3 hidden">
+    <div class="row g-2">
+        <div class="col-auto">
+            <label for="date_from">Дата с</label>
+            <input type="date" name="date_from" id="date_from" value="{{ request.GET.date_from }}" class="form-control">
+        </div>
+        <div class="col-auto">
+            <label for="date_to">Дата по</label>
+            <input type="date" name="date_to" id="date_to" value="{{ request.GET.date_to }}" class="form-control">
+        </div>
+        <div class="col-auto " >
+            <label for="status">Статус</label>
+            <select name="status" id="status" class="form-control">
+                <option value="0">Все</option>
+                {% for s in status_list %}
+                    <option value="{{ s.pk }}" {% if s == request.GET.status %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto " >
+            <label for="type">Тип</label>
+            <select name="type" id="type" class="form-control">
+                <option value="0">Все</option>
+                {% for t in types %}
+                    <option value="{{ t.id }}" {% if t.id|stringformat:"s" == request.GET.type %}
+                selected
+                {% endif %}>{{ t.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto " >
+            <label for="category">Категория</label>
+            <select name="category" id="category" class="form-control">
+                <option value="0">Все</option>
+                {% for c in categories %}
+                    <option value="{{ c.id }}" {% if c.id|stringformat:"s" == request.GET.category %}
+                selected
+                {% endif %}>{{ c.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto " >
+            <label for="subcategory">Подкатегория</label>
+            <select name="subcategory" id="subcategory" class="form-control">
+                <option value="0">Все</option>
+                {% for sc in subcategories %}
+                    <option value="{{ sc.id }}" {% if sc.id|stringformat:"s" == request.GET.subcategory %}
+                selected
+                {% endif %}>{{ sc.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Применить</button>
+            <a href="{% url 'main:index' %}" class="btn btn-secondary">Сбросить</a>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    {% if records %}
+    <thead>
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Статус</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Тип</th>
+        <th scope="col">Категория</th>
+        <th scope="col">Подкатегория</th>
+        <th scope="col">Комментарий</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for record in records %}
+    <tr>
+        <td>{{ record.name }}</td>
+        <td>{{ record.date }}</td>
+        <td>{{ record.status }}</td>
+        <td>{{ record.amount }} ₽</td>
+        <td>{{ record.subcategory.parent.type }}</td>
+        <td>{{ record.subcategory.parent }}</td>
+        <td>{{ record.subcategory }}</td>
+        <td>{{ record.comment }}</td>
+        <td class="parent-container">
+            <a href="{% url 'main:updateRecord' pk=record.id %}" class="button-svg--blue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                    <title>Редактировать</title>
+                    <path d="M18.988 2.012l3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287l-3-3L8 13z"
+                          fill="currentColor"/>
+                    <path d="M19 19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"
+                          fill="currentColor"/>
+                </svg>
+            </a>
+            <div data-id="{{record.id}}" class="pre_delete_record button-svg--red" data-type="record">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                    <title>Удалить</title>
+                    <path fill="currentColor"
+                          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Нет записей.</p>
+{% endif %}
+{% endblock %}

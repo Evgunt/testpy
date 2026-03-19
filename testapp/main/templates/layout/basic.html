@@ -1,0 +1,45 @@
+{% load static %}
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <script src="{% static 'js/main.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <title>Веб-сервис для управления движением денежных средств</title>
+</head>
+<body>
+<header>
+    <nav class="nav container-md">
+        <a class="nav-link {% if request.path == '/' %}nav-link--active{% endif %}"
+           href="{% url 'main:index' %}">Главная</a>
+        <a class="nav-link {% if request.path == '/directory' %}nav-link--active{% endif %}"
+           href="{% url 'main:directory' %}" data-ty="{{request.path}}">Справочники</a>
+    </nav>
+</header>
+<div class="modal-record">
+    <div class="modal-record-content">
+        <h4 class="modal-record-content__title">Удаление элемента</h4>
+        <p>Вы действительно хотите удалить элемент?</p>
+        <div class="modal-record-content-buttons">
+            {% csrf_token %}
+            <button class="modal-record-content-buttons__button btn btn-sm btn-primary" id="delete_button">Да</button>
+            <div class="modal-record-content-buttons__button btn btn-sm btn-danger" id="cancel_delete">Отмена</div>
+        </div>
+    </div>
+</div>
+<main class="container-md">
+    {% bootstrap_messages %}
+    {% block content %}
+    {% endblock %}
+</main>
+
+</body>
+</html>

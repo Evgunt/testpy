@@ -1,0 +1,172 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+<h3 class="directory-title">Справочники</h3>
+<div class="row">
+    <!-- Первый блок -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Типы</h5>
+                <div>
+                    <a href="{% url 'main:createType' %}" class="btn btn-sm btn-primary">Добавить</a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if types %}
+                {%for type in types%}
+                <div class="p-2  parent-container">
+                    <h6>{{type.name}}</h6>
+                    <div class="buttons">
+                        <a href="{% url 'main:updateType' pk=type.pk %}" class="button-svg--blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Редактировать</title>
+                                <path d="M18.988 2.012l3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287l-3-3L8 13z"
+                                      fill="currentColor"/>
+                                <path d="M19 19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"
+                                      fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <button class="button-svg--red pre_delete_record"
+                                data-id="{{type.pk}}" data-type="type">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Удалить</title>
+                                <path fill="currentColor"
+                                      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {%for category in categories%}
+                {%if category.type.id == type.id%}
+                <div class="ml-4 border p-2 ">
+                    <h6>{{category.title}}</h6>
+                </div>
+                {%endif%}
+                {%endfor%}
+                {%endfor%}
+                {%else%}
+                <p>Нет типов</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+    <!-- Второй блок -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Категории</h5>
+                <div>
+                    <a class="btn btn-sm btn-primary" href="{% url 'main:createCategory' %}">Добавить</a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if categories %}
+                {%for category in categories%}
+                <div class="p-2  parent-container">
+                    <h6>{{category.title}}</h6>
+                    <div class="buttons">
+                        <a class="button-svg--blue" href="{% url 'main:createSubcategory' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 16 16">
+                                <title>Добавить</title>
+                                <path fill="currentColor" fill-rule="evenodd"
+                                      d="M13.5 8a5.5 5.5 0 1 1-11 0a5.5 5.5 0 0 1 11 0M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0M8.75 5.5a.75.75 0 0 0-1.5 0v1.75H5.5a.75.75 0 0 0 0 1.5h1.75v1.75a.75.75 0 0 0 1.5 0V8.75h1.75a.75.75 0 0 0 0-1.5H8.75z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        <a class="button-svg--blue"
+                           href="{% url 'main:updateCategory' pk=category.pk%}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Редактировать</title>
+                                <path d="M18.988 2.012l3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287l-3-3L8 13z"
+                                      fill="currentColor"/>
+                                <path d="M19 19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"
+                                      fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <button class="button-svg--red pre_delete_record"
+                                data-id="{{category.pk}}" data-type="category">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Удалить</title>
+                                <path fill="currentColor"
+                                      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {%for subcategory in subcategories%}
+                {%if subcategory.parent.id == category.id%}
+                <div class="ml-4 border p-2  parent-container">
+                    <h6>{{subcategory.title}}</h6>
+                    <div class="buttons">
+                        <a class="button-svg--blue" href="{% url 'main:updateSubcategory' pk=subcategory.pk%}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Редактировать</title>
+                                <path d="M18.988 2.012l3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287l-3-3L8 13z"
+                                      fill="currentColor"/>
+                                <path d="M19 19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"
+                                      fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <button class="button-svg--red pre_delete_record"
+                                data-id="{{subcategory.pk}}" data-type="subcategory">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Удалить</title>
+                                <path fill="currentColor"
+                                      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {%endif%}
+                {%endfor%}
+                {%endfor%}
+                {%else%}
+                <p>Нет категорий</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+    <!-- Третий блок -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Статусы</h5>
+                <div>
+                    <a class="btn btn-sm btn-primary" href="{% url 'main:createStatus'%}">Добавить</a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if statuses %}
+                {%for status in statuses%}
+                <div class="ml-3 p- parent-container">
+                    <h6>{{status.name}}</h6>
+                    <div class="buttons">
+                        <a class="button-svg--blue" href="{% url 'main:updateStatus' pk=status.pk%}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Редактировать</title>
+                                <path d="M18.988 2.012l3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287l-3-3L8 13z"
+                                      fill="currentColor"/>
+                                <path d="M19 19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"
+                                      fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <button class="button-svg--red pre_delete_record"
+                                data-id="{{status.pk}}" data-type="status">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                                <title>Удалить</title>
+                                <path fill="currentColor"
+                                      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {%endfor%}
+                {%else%}
+                <p>Нет статусов</p>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
